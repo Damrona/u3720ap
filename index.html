@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copiador de Texto</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4CAF50;
+            font-size: 24px;
+        }
+        
+        .text-box {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .text-content {
+            margin-bottom: 15px;
+            word-break: break-all;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .copy-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            align-self: flex-end;
+            transition: background-color 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .copy-btn.copied {
+            background-color: #2196F3;
+        }
+        
+        @media (min-width: 768px) {
+            .text-box {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .text-content {
+                margin-bottom: 0;
+                margin-right: 15px;
+                flex: 1;
+            }
+            
+            .copy-btn {
+                align-self: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Configuraciones de Conexión</h1>
+        
+        <div class="text-box">
+            <div class="text-content">DIRECT-NS-5A</div>
+            <!-- Primer elemento sin botón de copiar -->
+        </div>
+        
+        <div class="text-box">
+            <div class="text-content">PorqNoLaHacenPublicaChe</div>
+            <button class="copy-btn" onclick="copyText(this)">Copiar</button>
+        </div>
+        
+        <div class="text-box">
+            <div class="text-content">Proxy<br>192.168.49.1<br>8282</div>
+            <button class="copy-btn" onclick="copyText(this)">Copiar</button>
+        </div>
+        
+        <div class="text-box">
+            <div class="text-content">8282</div>
+            <button class="copy-btn" onclick="copyText(this)">Copiar</button>
+        </div>
+    </div>
+
+    <script>
+        function copyText(button) {
+            // Obtener el texto del div hermano
+            const textDiv = button.previousElementSibling;
+            const textToCopy = textDiv.textContent;
+            
+            // Crear un área de texto temporal para copiar
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = textToCopy;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            
+            try {
+                // Intentar copiar el texto
+                const successful = document.execCommand('copy');
+                const msg = successful ? 'Texto copiado!' : 'Error al copiar';
+                
+                // Cambiar el texto del botón temporalmente
+                const originalText = button.textContent;
+                button.textContent = msg;
+                button.classList.add('copied');
+                
+                // Restaurar el texto original después de 2 segundos
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+                
+            } catch (err) {
+                console.error('Error al copiar texto: ', err);
+            }
+            
+            // Limpiar
+            document.body.removeChild(tempTextArea);
+        }
+    </script>
+</body>
+</html>
